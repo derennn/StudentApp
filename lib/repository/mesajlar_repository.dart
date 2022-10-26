@@ -7,6 +7,8 @@ class MesajlarRepository {
     Mesaj('Evet', 'Ayşe', DateTime.now()),
   ];
 
+  int yeniMesajSayisi = 4;
+
 }
 
 class Mesaj {
