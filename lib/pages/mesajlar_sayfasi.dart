@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'dart:math';
 
 import 'package:ogrenci_app/repository/mesajlar_repository.dart';
 
-class MesajlarSayfasi extends StatefulWidget {
-  final MesajlarRepository mesajlarRepository;
-  const MesajlarSayfasi(this.mesajlarRepository, {Key? key}) : super(key: key);
+class MesajlarSayfasi extends ConsumerStatefulWidget {
+  const MesajlarSayfasi({Key? key}) : super(key: key);
 
   @override
-  State<MesajlarSayfasi> createState() => _MesajlarSayfasiState();
+  _MesajlarSayfasiState createState() => _MesajlarSayfasiState();
 }
 
-class _MesajlarSayfasiState extends State<MesajlarSayfasi> {
+class _MesajlarSayfasiState extends ConsumerState<MesajlarSayfasi> {
 
   @override
   void initState() {
-    widget.mesajlarRepository.yeniMesajSayisi = 0;
+    Future.delayed(Duration.zero).then((value) => ref.read(yeniMesajSayisiProvider.notifier).sifirla());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final mesajlarRepository = ref.watch(mesajlarProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Mesajlar Sayfasi')),
       body: Column(
@@ -28,9 +29,9 @@ class _MesajlarSayfasiState extends State<MesajlarSayfasi> {
           Expanded(
             child: ListView.builder(
               reverse: true,
-              itemCount: widget.mesajlarRepository.mesajlar.length,
+              itemCount: mesajlarRepository.mesajlar.length,
               itemBuilder: (context, index) {
-                return MesajGorunumu(widget.mesajlarRepository.mesajlar[widget.mesajlarRepository.mesajlar.length - index -1]);
+                return MesajGorunumu(mesajlarRepository.mesajlar[mesajlarRepository.mesajlar.length - index -1]);
               },
             ),
           ),
