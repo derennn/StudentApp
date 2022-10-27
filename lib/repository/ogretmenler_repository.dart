@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ogrenci_app/services/data_services.dart';
+import '../models/ogretmen.dart';
 
 class OgretmenlerRepository extends ChangeNotifier{
 
@@ -7,17 +9,18 @@ class OgretmenlerRepository extends ChangeNotifier{
     Ogretmen('Faruk', 'Yılmaz', 18, 'Erkek'),
     Ogretmen('Semiha', 'Çelik', 20, 'Kadın'),
   ];
+
+  final DataService dataService;
+  OgretmenlerRepository(this.dataService);
+
+  void indir() {
+    Ogretmen ogretmen = dataService.ogretmenIndir();
+
+    ogretmenler.add(ogretmen);
+    notifyListeners();
+  }
 }
 
 final ogretmenlerProvider = ChangeNotifierProvider((ref) {
-  return OgretmenlerRepository();
+  return OgretmenlerRepository(ref.watch(dataServiceProvider));
 });
-
-class Ogretmen {
-  String ad;
-  String soyad;
-  int yas;
-  String cinsiyet;
-
-  Ogretmen(this.ad, this.soyad, this.yas, this.cinsiyet);
-}
