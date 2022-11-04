@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ogrenci_app/repository/ogretmenler_repository.dart';
 import '../models/ogretmen.dart';
+import 'package:ogrenci_app/pages/ogretmen/ogretmen_form.dart';
 
 class OgretmenlerSayfasi extends ConsumerWidget {
   const OgretmenlerSayfasi({Key? key})
@@ -28,27 +29,89 @@ class OgretmenlerSayfasi extends ConsumerWidget {
                 ),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: IconButton(
-                      onPressed: () {
-                        ref.read(ogretmenlerProvider).indir();
-                      },
-                      icon: const Icon(Icons.download),
-                  ),
+                  child: OgretmenindirmeButonu(),
                 ),
               ],
             ),
           ),
           Expanded(
-            child: ListView.separated(
-              itemBuilder: (context, index) => OgretmenSatiri(
-                ogretmenlerRepository.ogretmenler[index],
+            child: RefreshIndicator(
+              onRefresh: () async {
+                ref.refresh(ogretmenListesiProvider);
+              },
+              child: ref.watch(ogretmenListesiProvider).when(
+                data: (data) => ListView.separated(
+                  itemBuilder: (context, index) => OgretmenSatiri(
+                    data[index],
+                  ),
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemCount: data.length,
+                ),
+                error: (error, stackTrace) {
+                  return const Text('error');
+                },
+                loading: () {
+                  return const Center(child: CircularProgressIndicator());
+                },
               ),
-              separatorBuilder: (context, index) => const Divider(),
-              itemCount: ogretmenlerRepository.ogretmenler.length,
-            ),
+            )
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final created = await Navigator.of(context).push<bool>(MaterialPageRoute(
+            builder: (context) {
+              return const OgretmenForm();
+            },
+          ));
+          if (created == true) {
+            print('Ogretmenleri yenile!');
+          }
+        },
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class OgretmenindirmeButonu extends StatefulWidget {
+  const OgretmenindirmeButonu({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<OgretmenindirmeButonu> createState() => _OgretmenindirmeButonuState();
+}
+
+class _OgretmenindirmeButonuState extends State<OgretmenindirmeButonu> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer(
+      builder: (context, ref, child) {
+        return isLoading ? CircularProgressIndicator() : IconButton(
+          icon: const Icon(Icons.download),
+            onPressed: () async {
+            try {
+              setState(() {
+                isLoading = true;
+              });
+              await ref.read(ogretmenlerProvider).indir();
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(e.toString())),
+              );
+            }
+            finally {
+              setState(() {
+                isLoading = false;
+              });
+            }
+          },
+        );
+      }
     );
   }
 }

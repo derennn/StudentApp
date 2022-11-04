@@ -52,10 +52,10 @@ class _MesajlarSayfasiState extends ConsumerState<MesajlarSayfasi> {
                           borderRadius: const BorderRadius.all(Radius.circular(20)),
                           color: Colors.grey.shade300,
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 12),
                           child: TextField(
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               border: InputBorder.none,
                             ),
                           ),
