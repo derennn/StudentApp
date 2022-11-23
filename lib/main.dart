@@ -11,7 +11,6 @@ import 'package:ogrenci_app/repository/mesajlar_repository.dart';
 import 'package:ogrenci_app/repository/ogrenciler_repository.dart';
 import 'package:ogrenci_app/repository/ogretmenler_repository.dart';
 import 'animationsayfasi.dart';
-import 'dart:convert';
 
 void main() {
   runApp(const ProviderScope(child: OgrenciApp()));

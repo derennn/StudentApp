@@ -26,3 +26,6 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+  assets:
+    - assets/tans.jpeg
+    - assets/erkin.jpeg

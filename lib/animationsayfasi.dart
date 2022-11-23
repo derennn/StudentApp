@@ -48,8 +48,8 @@ class _SliderIleExplicitAnimationState extends State<SliderIleExplicitAnimation>
 
   late final animController = AnimationController(vsync: this);
   final alignmentTween = Tween<AlignmentGeometry>(
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
+    begin: Alignment.centerRight,
+    end: Alignment.centerLeft,
   );
   double sliderValue = 0.0;
 
@@ -133,8 +133,8 @@ class _AnimatedContainerDenemeState extends State<AnimatedContainerDeneme> {
         ),
         const SizedBox(height: 80),
         AnimatedContainer(
-          height: animBool ? 100 : 120,
-          width: animBool ? 100 : 120,
+          height: animBool ? 100 : 140,
+          width: animBool ? 100 : 140,
           duration: widget.duration,
           curve: Curves.easeInOutQuad,
           margin: EdgeInsets.only(
@@ -281,7 +281,7 @@ class _AnimatedCrossFadeDenemeState extends State<AnimatedCrossFadeDeneme> {
               animBool = !animBool;
             });
           },
-          child: const Text('Değiştir'),
+          child: const Text('Dönüştür'),
         )
       ],
     );
